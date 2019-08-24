@@ -1,16 +1,14 @@
 var postcss = require('postcss')
 var traderacss = require('./traderacss')
-
 var plugin = require('./')
 
-function run(input, output, opts) {
-  return postcss([plugin(opts)]).process(input).then(function (result) {
-    console.log(result.css)
-    //expect(result.css).toEqual(output)
-    expect(result.warnings()).toHaveLength(0)
-  })
-}
-
-it('does something', function () {
-  return run(traderacss, 'a{ }', {})
+const run = (input, output, opts) => () => postcss([plugin(opts)]).process(input).then(result => {
+  expect(result.css).toEqual(output)
+  expect(result.warnings()).toHaveLength(0)
 })
+
+it('Maps colors from the color map, removing declarations and rules lacking colors', run(
+  'a { color: #ffe; border-radius: 5px; background-color: #ffeffe; } a:hover { text-decoration: underline; }',
+  'a { color: dark-white; background-color: another-white; }',
+  { '#ffe': 'dark-white', '#ffeffe': 'another-white' }
+))
