@@ -1,10 +1,9 @@
 const postcss = require('postcss')
+const { shortHexa, longHexa } = require('./regex');
 
-// The order of the regexes matters since shorter regexes can also match the longer ones. The shorter 
-// will replace the longer ones before they are run if they are run first.
 const regexes = [
-  /#([A-Fa-f0-9]{6})([; ,]|)/gi, // #ffeeff
-  /#([A-Fa-f0-9]{3})([; ,]|)/gi // #ffe
+  shortHexa,
+  longHexa
 ]
 
 module.exports = postcss.plugin(
