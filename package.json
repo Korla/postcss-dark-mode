@@ -34,12 +34,20 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-standard": "^4.0.0",
-    "jest": "^23.6.0"
+    "husky": "^3.0.8",
+    "jest": "^23.6.0",
+    "precise-commits": "^1.0.2",
+    "prettier": "1.18.2"
   },
   "eslintConfig": {
     "extends": "eslint-config-postcss/es5"
   },
   "jest": {
     "testEnvironment": "node"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "precise-commits"
+    }
   }
 }
