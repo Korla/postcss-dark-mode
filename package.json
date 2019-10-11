@@ -10,7 +10,8 @@
     "darkmode"
   ],
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "author": "korla <bengtsson.johannes@gmail.com>",
   "license": "MIT",
