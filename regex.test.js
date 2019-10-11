@@ -26,24 +26,24 @@ it('rgb', () => {
 
 it('rgba', () => {
   const regex = rgba;
-  expect('rgba(1,1,1)'.match(regex)).toEqual(['rgba(1,1,1)']);
-  expect(' rgba(1,1,1)'.match(regex)).toEqual(['rgba(1,1,1)']);
-  expect('rgba(1,1,1);'.match(regex)).toEqual(null);
-  expect('rgb(1,1,1);'.match(regex)).toEqual(null);
+  expect('rgba(1,1,1,0.5)'.match(regex)).toEqual(['rgba(1,1,1,0.5)']);
+  expect(' rgba(1,1,1,0.5)'.match(regex)).toEqual(['rgba(1,1,1,0.5)']);
+  expect('rgba(1,1,1,0.5);'.match(regex)).toEqual(null);
+  expect('rgb(1,1,1,0.5);'.match(regex)).toEqual(null);
 });
 
 it('hsl', () => {
   const regex = hsl;
-  expect('hsl(1,1,1)'.match(regex)).toEqual(['hsl(1,1,1)']);
-  expect(' hsl(1,1,1)'.match(regex)).toEqual(['hsl(1,1,1)']);
-  expect('hsl(1,1,1);'.match(regex)).toEqual(null);
-  expect('hsla(1,1,1);'.match(regex)).toEqual(null);
+  expect('hsl(0,0%,69%)'.match(regex)).toEqual(['hsl(0,0%,69%)']);
+  expect(' hsl(0,0%,69%)'.match(regex)).toEqual(['hsl(0,0%,69%)']);
+  expect('hsl(0,0%,69%);'.match(regex)).toEqual(null);
+  expect('hsla(0,0%,69%,0.5));'.match(regex)).toEqual(null);
 });
 
 it('hsla', () => {
   const regex = hsla;
-  expect('hsla(1,1,1)'.match(regex)).toEqual(['hsla(1,1,1)']);
-  expect(' hsla(1,1,1)'.match(regex)).toEqual(['hsla(1,1,1)']);
-  expect('hsla(1,1,1);'.match(regex)).toEqual(null);
-  expect('hsl(1,1,1);'.match(regex)).toEqual(null);
+  expect('hsla(0,0%,69%,0.5)'.match(regex)).toEqual(['hsla(0,0%,69%,0.5)']);
+  expect(' hsla(0,0%,69%,0.5)'.match(regex)).toEqual(['hsla(0,0%,69%,0.5)']);
+  expect('hsla(0,0%,69%,0.5);'.match(regex)).toEqual(null);
+  expect('hsl(0,0%,69%);'.match(regex)).toEqual(null);
 });
