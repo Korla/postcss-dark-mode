@@ -1,5 +1,4 @@
 var postcss = require('postcss');
-var traderacss = require('./traderacss');
 var plugin = require('./');
 
 const run = (input, opts, resultCallback) => () =>
