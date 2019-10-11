@@ -48,12 +48,18 @@ it(
   )
 );
 
-it(
+test.skip(
   'Will not replace already replaced values',
-  run(`a { color: #ffe; border-radius: 5px; }`, { '#ffe': 'red' }, result => {
-    expect(result.css).toEqual('a { color: red; }');
-    expect(result.warnings()).toHaveLength(0);
-  })
+  run(
+    `a { background: linear-gradient(left, #ffa 0%, #ffe 100%); }`,
+    { '#ffe': '#ffa', '#ffa': '#ffe' },
+    result => {
+      expect(result.css).toEqual(
+        'a { background: linear-gradient(left, #ffe 0%, #ffa 100%); }'
+      );
+      expect(result.warnings()).toHaveLength(0);
+    }
+  )
 );
 
 it(
