@@ -1,7 +1,7 @@
 const postcss = require('postcss');
-const { shortHexa, longHexa, rgb } = require('./regex');
+const regexesObject = require('./regex');
 
-const regexes = [shortHexa, longHexa, rgb];
+const regexes = Object.values(regexesObject);
 
 module.exports = postcss.plugin('postcss-dark-mode', opts => (root, result) => {
   root.walkRules(rule => {
