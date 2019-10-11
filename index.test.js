@@ -9,10 +9,17 @@ const run = (input, opts, resultCallback) => () =>
 it(
   'Maps colors using the color map',
   run(
-    `a { color: #ffe; border-radius: 5px; background-color: #ffeeff; box-shadow:2px 2px 0 rgb(1,1,1); }`,
-    { '#ffe': 'red', '#ffeeff': 'blue', 'rgb(1,1,1)': 'rgb(27,27,27)' },
+    `a { color: #ffe; border-radius: 5px; background-color: #ffeeff; box-shadow:2px 2px 0 rgb(1,1,1); -webkit-box-shadow:2px 2px 0 rgba(1,1,1); }`,
+    {
+      '#ffe': 'red',
+      '#ffeeff': 'blue',
+      'rgb(1,1,1)': 'rgb(27,27,27)',
+      'rgba(1,1,1)': 'rgba(27,27,27)'
+    },
     result => {
-      expect(result.css).toEqual('a { color: red; background-color: blue; box-shadow:2px 2px 0 rgb(27,27,27); }');
+      expect(result.css).toEqual(
+        'a { color: red; background-color: blue; box-shadow:2px 2px 0 rgb(27,27,27); -webkit-box-shadow:2px 2px 0 rgba(27,27,27); }'
+      );
       expect(result.warnings()).toHaveLength(0);
     }
   )
