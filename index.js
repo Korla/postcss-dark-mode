@@ -17,7 +17,12 @@ module.exports = postcss.plugin('postcss-dark-mode', opts => (root, result) => {
           ruleHasMatch = true;
           // TODO: If no matching color is found, a warning is created.
           // Each match which is found is run again, this time replacing the found value with the mapped value.
-          decl.value = decl.value.replace(regex, opts[match]);
+          const escapedRegexLiteral = escapeRegexLiterals(match);
+          const regexToReplace = new RegExp(
+            `${escapedRegexLiteral}(?=($|\\s))`,
+            'gi'
+          );
+          decl.value = decl.value.replace(regexToReplace, opts[match]);
         });
       });
       if (!declHasMatch) {
@@ -29,3 +34,6 @@ module.exports = postcss.plugin('postcss-dark-mode', opts => (root, result) => {
     }
   });
 });
+
+const escapeRegexLiterals = regexString =>
+  regexString.replace(/\(/g, '\\(').replace(/\)/g, '\\)');

@@ -44,3 +44,25 @@ it(
     expect(result.warnings()).toHaveLength(0);
   })
 );
+
+it(
+  'Handles multiple replace of the same type',
+  run(
+    `a { background: -moz-linear-gradient(left, #ffa 0%, #ffe 50%, #ffa 100%); }`,
+    { '#ffe': 'red', '#ffa': 'blue' },
+    result => {
+      expect(result.css).toEqual(
+        'a { background: -moz-linear-gradient(left, blue 0%, red 50%, blue 100%); }'
+      );
+      expect(result.warnings()).toHaveLength(0);
+    }
+  )
+);
+
+it(
+  'Will not replace already replaced values',
+  run(`a { color: #ffe; border-radius: 5px; }`, { '#ffe': 'red' }, result => {
+    expect(result.css).toEqual('a { color: red; }');
+    expect(result.warnings()).toHaveLength(0);
+  })
+);
