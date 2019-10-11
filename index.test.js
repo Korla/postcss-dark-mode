@@ -1,5 +1,5 @@
-var postcss = require('postcss');
-var plugin = require('./');
+const postcss = require('postcss');
+const plugin = require('./');
 
 const run = (input, opts, resultCallback) => () =>
   postcss([plugin(opts)])
@@ -9,10 +9,10 @@ const run = (input, opts, resultCallback) => () =>
 it(
   'Maps colors using the color map',
   run(
-    `a { color: #ffe; border-radius: 5px; background-color: #ffeeff; }`,
-    { '#ffe': 'red', '#ffeeff': 'blue' },
+    `a { color: #ffe; border-radius: 5px; background-color: #ffeeff; box-shadow:2px 2px 0 rgb(1,1,1); }`,
+    { '#ffe': 'red', '#ffeeff': 'blue', 'rgb(1,1,1)': 'rgb(27,27,27)' },
     result => {
-      expect(result.css).toEqual('a { color: red; background-color: blue; }');
+      expect(result.css).toEqual('a { color: red; background-color: blue; box-shadow:2px 2px 0 rgb(27,27,27); }');
       expect(result.warnings()).toHaveLength(0);
     }
   )
