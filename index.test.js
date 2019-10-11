@@ -66,3 +66,19 @@ it(
     expect(result.warnings()).toHaveLength(0);
   })
 );
+
+it(
+  'Will warn if mapping is missing and not keep the declaration',
+  run(
+    `a { color: #ffe; background-color: #ffeeff; }`,
+    { '#ffeeff': 'blue' },
+    result => {
+      const warnings = result.warnings();
+      expect(warnings).toHaveLength(1);
+      expect(warnings[0].text).toEqual(
+        `Color '#ffe' lacks mapping (Rule: 'a { color: #ffe; background-color: #ffeeff; }')`
+      );
+      expect(result.css).toEqual('a { background-color: blue; }');
+    }
+  )
+);
