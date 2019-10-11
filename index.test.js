@@ -37,11 +37,11 @@ it(
 it(
   'Handles multiple replace of the same type',
   run(
-    `a { background: -moz-linear-gradient(left, #ffa 0%, #ffe 50%, #ffa 100%); }`,
+    `a { background: linear-gradient(left, #ffa 0%, #ffe 50%, #ffa 100%); }`,
     { '#ffe': 'red', '#ffa': 'blue' },
     result => {
       expect(result.css).toEqual(
-        'a { background: -moz-linear-gradient(left, blue 0%, red 50%, blue 100%); }'
+        'a { background: linear-gradient(left, blue 0%, red 50%, blue 100%); }'
       );
       expect(result.warnings()).toHaveLength(0);
     }
