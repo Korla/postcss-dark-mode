@@ -8,7 +8,7 @@ const run = (input, opts, resultCallback) => () =>
 
 it(
   'Maps colors using the color map',
-  run(`a { color: #ffe; }`, { '#ffe': 'red' }, result => {
+  run(`a { color: #ffe; }`, { darkmode: { '#ffe': 'red' } }, result => {
     expect(result.css).toEqual(
       'a { color: #ffe; }.theming-darkmode a { color: red; }'
     );
@@ -20,9 +20,11 @@ it(
   'Does not add theming for rules without color',
   run(
     `a { color: #ffe; } a:hover { text-decoration: underline; }`,
-    { '#ffe': 'red' },
+    { darkmode: { '#ffe': 'red' } },
     result => {
-      expect(result.css).toEqual('a { color: #ffe; }.theming-darkmode a { color: red; } a:hover { text-decoration: underline; }');
+      expect(result.css).toEqual(
+        'a { color: #ffe; }.theming-darkmode a { color: red; } a:hover { text-decoration: underline; }'
+      );
       expect(result.warnings()).toHaveLength(0);
     }
   )
@@ -30,17 +32,23 @@ it(
 
 it(
   'Does not add declarations which lack color to theming rules',
-  run(`a { color: #ffe; border-radius: 5px; }`, { '#ffe': 'red' }, result => {
-    expect(result.css).toEqual('a { color: #ffe; border-radius: 5px; }.theming-darkmode a { color: red; }');
-    expect(result.warnings()).toHaveLength(0);
-  })
+  run(
+    `a { color: #ffe; border-radius: 5px; }`,
+    { darkmode: { '#ffe': 'red' } },
+    result => {
+      expect(result.css).toEqual(
+        'a { color: #ffe; border-radius: 5px; }.theming-darkmode a { color: red; }'
+      );
+      expect(result.warnings()).toHaveLength(0);
+    }
+  )
 );
 
 it(
   'Handles multiple replace of the same type',
   run(
     `a { background: linear-gradient(left, #ffa 0%, #ffe 50%, #ffa 100%); }`,
-    { '#ffe': 'red', '#ffa': 'blue' },
+    { darkmode: { '#ffe': 'red', '#ffa': 'blue' } },
     result => {
       expect(result.css).toEqual(
         'a { background: linear-gradient(left, #ffa 0%, #ffe 50%, #ffa 100%); }.theming-darkmode a { background: linear-gradient(left, blue 0%, red 50%, blue 100%); }'
@@ -54,7 +62,7 @@ test.skip(
   'Will not replace already replaced values',
   run(
     `a { background: linear-gradient(left, #ffa 0%, #ffe 100%); }`,
-    { '#ffe': '#ffa', '#ffa': '#ffe' },
+    { darkmode: { '#ffe': '#ffa', '#ffa': '#ffe' } },
     result => {
       expect(result.css).toEqual(
         'a { background: linear-gradient(left, #ffa 0%, #ffe 100%); }.theming-darkmode a { background: linear-gradient(left, #ffe 0%, #ffa 100%); }'
@@ -68,7 +76,7 @@ it(
   'Will warn if mapping is missing and not keep the declaration',
   run(
     `a { color: #ffe; background-color: #ffeeff; }`,
-    { '#ffeeff': 'blue' },
+    { darkmode: { '#ffeeff': 'blue' } },
     result => {
       const warnings = result.warnings();
       expect(warnings).toHaveLength(1);
@@ -86,7 +94,7 @@ it(
   'Appends rules inside at-rules',
   run(
     `@media (min-width: 768px) { a { color: #ffe; } }`,
-    { '#ffe': 'red' },
+    { darkmode: { '#ffe': 'red' } },
     result => {
       expect(result.css).toEqual(
         '@media (min-width: 768px) { a { color: #ffe; } .theming-darkmode a { color: red; } }'
