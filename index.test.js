@@ -9,27 +9,29 @@ const run = (input, opts, resultCallback) => () =>
 it(
   'Maps colors using the color map',
   run(`a { color: #ffe; }`, { '#ffe': 'red' }, result => {
-    expect(result.css).toEqual('a { color: red; }');
+    expect(result.css).toEqual(
+      'a { color: #ffe; }.theming-darkmode a { color: red; }'
+    );
     expect(result.warnings()).toHaveLength(0);
   })
 );
 
 it(
-  'Removes rules which lack color declaraions',
+  'Does not add theming for rules without color',
   run(
     `a { color: #ffe; } a:hover { text-decoration: underline; }`,
     { '#ffe': 'red' },
     result => {
-      expect(result.css).toEqual('a { color: red; }');
+      expect(result.css).toEqual('a { color: #ffe; }.theming-darkmode a { color: red; } a:hover { text-decoration: underline; }');
       expect(result.warnings()).toHaveLength(0);
     }
   )
 );
 
 it(
-  'Removes declarations which lack color',
+  'Does not add declarations which lack color to theming rules',
   run(`a { color: #ffe; border-radius: 5px; }`, { '#ffe': 'red' }, result => {
-    expect(result.css).toEqual('a { color: red; }');
+    expect(result.css).toEqual('a { color: #ffe; border-radius: 5px; }.theming-darkmode a { color: red; }');
     expect(result.warnings()).toHaveLength(0);
   })
 );
@@ -41,7 +43,7 @@ it(
     { '#ffe': 'red', '#ffa': 'blue' },
     result => {
       expect(result.css).toEqual(
-        'a { background: linear-gradient(left, blue 0%, red 50%, blue 100%); }'
+        'a { background: linear-gradient(left, #ffa 0%, #ffe 50%, #ffa 100%); }.theming-darkmode a { background: linear-gradient(left, blue 0%, red 50%, blue 100%); }'
       );
       expect(result.warnings()).toHaveLength(0);
     }
@@ -55,7 +57,7 @@ test.skip(
     { '#ffe': '#ffa', '#ffa': '#ffe' },
     result => {
       expect(result.css).toEqual(
-        'a { background: linear-gradient(left, #ffe 0%, #ffa 100%); }'
+        'a { background: linear-gradient(left, #ffa 0%, #ffe 100%); }.theming-darkmode a { background: linear-gradient(left, #ffe 0%, #ffa 100%); }'
       );
       expect(result.warnings()).toHaveLength(0);
     }
@@ -73,7 +75,23 @@ it(
       expect(warnings[0].text).toEqual(
         `Color '#ffe' lacks mapping (Rule: 'a { color: #ffe; background-color: #ffeeff; }')`
       );
-      expect(result.css).toEqual('a { background-color: blue; }');
+      expect(result.css).toEqual(
+        'a { color: #ffe; background-color: #ffeeff; }.theming-darkmode a { background-color: blue; }'
+      );
+    }
+  )
+);
+
+it(
+  'Appends rules inside at-rules',
+  run(
+    `@media (min-width: 768px) { a { color: #ffe; } }`,
+    { '#ffe': 'red' },
+    result => {
+      expect(result.css).toEqual(
+        '@media (min-width: 768px) { a { color: #ffe; } .theming-darkmode a { color: red; } }'
+      );
+      expect(result.warnings()).toHaveLength(0);
     }
   )
 );
