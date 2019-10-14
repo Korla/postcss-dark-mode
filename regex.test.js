@@ -1,4 +1,12 @@
-const { shortHexa, longHexa, rgb, rgba, hsl, hsla } = require('./regex');
+const {
+  shortHexa,
+  longHexa,
+  longestHexa,
+  rgb,
+  rgba,
+  hsl,
+  hsla
+} = require('./regex');
 
 it('Short hexa', () => {
   const regex = shortHexa;
@@ -13,6 +21,14 @@ it('Long hexa', () => {
   expect('#ffeeff'.match(regex)).toEqual(['#ffeeff']);
   expect(' #ffeeff'.match(regex)).toEqual(['#ffeeff']);
   expect('#ffeeff;'.match(regex)).toEqual(null);
+  expect('#ffe'.match(regex)).toEqual(null);
+});
+
+it('LongestHexa hexa', () => {
+  const regex = longestHexa;
+  expect('#ffeeffff'.match(regex)).toEqual(['#ffeeffff']);
+  expect(' #ffeeffff'.match(regex)).toEqual(['#ffeeffff']);
+  expect('#ffeeffff;'.match(regex)).toEqual(null);
   expect('#ffe'.match(regex)).toEqual(null);
 });
 
