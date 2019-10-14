@@ -7,7 +7,10 @@ module.exports = postcss.plugin('postcss-dark-mode', opts => (root, result) => {
   root.walkRules(originalRule => {
     // Walk all rules in the stylesheet, if the rule contains a declaration with color, the rule should be appended to the stylesheet.
     const rule = originalRule.clone();
-    rule.selector = `.theming-darkmode ${rule.selector}`;
+    rule.selector = rule.selector
+      .split(',')
+      .map(selector => `.theming-darkmode ${selector}`)
+      .join(',');
     rule.removeAll();
     let ruleHasMatch = false;
 
@@ -20,11 +23,14 @@ module.exports = postcss.plugin('postcss-dark-mode', opts => (root, result) => {
           const colorToInsert = opts.darkmode[match];
           // If no matching color is found, a warning is created and the declaration isn't kept.
           if (colorToInsert === undefined) {
-            missingMappings[match] = missingMappings[match] || [];
-            missingMappings[match].push(originalRule);
-            result.warn(
-              `Color '${match}' lacks mapping (Rule: '${originalRule}')`
-            );
+            if (opts.debugColors) {
+              missingMappings[match] = missingMappings[match] || [];
+              missingMappings[match].push(originalRule);
+            } else {
+              result.warn(
+                `Color '${match}' lacks mapping (Rule: '${originalRule}')`
+              );
+            }
             return;
           } else if (colorToInsert === null) {
             // TODO: test this
@@ -55,7 +61,7 @@ module.exports = postcss.plugin('postcss-dark-mode', opts => (root, result) => {
     // TODO: test this
     const missing = Object.entries(missingMappings)
       .sort(([m1], [m2]) => (m1 < m2 ? -1 : 1))
-      .reduce((prev, [match]) => `${prev}'${match}': 'red',`, '');
+      .reduce((prev, [match]) => `${prev}'${match}': null,`, '');
     console.log(`{${missing}}`);
   }
 });
