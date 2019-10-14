@@ -103,3 +103,15 @@ it(
     }
   )
 );
+
+it('Can debug colors', () => {
+  console.log = jest.fn();
+  run(
+    `@media (min-width: 768px) { a { color: #ffe; } }`,
+    { darkmode: {}, debugColors: true },
+    result => {
+      expect(console.log.mock.calls).toHaveLength(1);
+      expect(console.log.mock.calls[0][0]).toEqual(`{'#ffe': null,}`);
+    }
+  )();
+});
